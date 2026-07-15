@@ -110,7 +110,7 @@ footer.site .brand-logo { background-image:url('assets/logo-white.png'); width:1
 @media (max-width: 860px) { .nav-links { display: none; } }
 
 /* ---------- HERO / VIDEO SCRUB ---------- */
-.hero-scroll { position: relative; height: 320vh; }
+.hero-scroll { position: relative; height: 160vh; }
 .hero-pin { position: sticky; top: 0; height: 100vh; overflow: hidden; }
 .hero-video-wrap { position: absolute; inset: 0; }
 .hero-video-wrap video { width: 100%; height: 100%; object-fit: cover; transform: scale(1.15); transform-origin: center center; }
@@ -670,7 +670,7 @@ footer.site .bot { max-width: var(--maxw); margin: 48px auto 0; padding-top: 24p
   const nav = document.getElementById('nav');
   ScrollTrigger.create({ start: 60, onUpdate: self => nav.classList.toggle('solid', self.scroll() > 60), onRefresh: self => nav.classList.toggle('solid', self.scroll() > 60) });
 
-  /* ---------- HERO video scrub ---------- */
+  /* ---------- HERO video autoplay & parallax ---------- */
   const video = document.getElementById('hero-video');
   const loading = document.getElementById('hero-loading');
   const heroScroll = document.getElementById('hero-scroll');
@@ -679,77 +679,21 @@ footer.site .bot { max-width: var(--maxw); margin: 48px auto 0; padding-top: 24p
   const scrollHint = document.getElementById('scroll-hint');
 
   let scrubInit = false;
-  let targetT = 0;
-  let animFrameId = null;
-  let isTicking = false;
-
-  function startTicking() {
-    if (!isTicking) {
-      isTicking = true;
-      tick();
-    }
-  }
-
-  function tick() {
-    if (!isTicking) return;
-    const dur = video.duration || 0;
-    let needsMore = false;
-    
-    if (dur && !video.seeking) {
-      const cur = video.currentTime;
-      const diff = targetT - cur;
-      if (Math.abs(diff) > 0.015) {
-        // ease toward target; cap the per-frame jump so seeks stay decodable
-        const next = cur + Math.max(-0.34, Math.min(0.34, diff * 0.28));
-        try {
-          if (video.fastSeek) video.fastSeek(next); else video.currentTime = next;
-        } catch (e) {}
-        needsMore = true;
-      }
-    } else if (video.seeking) {
-      // Check again next frame when seeking finishes
-      needsMore = true;
-    }
-
-    if (needsMore) {
-      animFrameId = requestAnimationFrame(tick);
-    } else {
-      isTicking = false;
-      animFrameId = null;
-    }
-  }
-
   function setupScrub() {
     if (scrubInit) return;
     scrubInit = true;
     loading.classList.add('hidden');
 
+    // Force video to autoplay in loop everywhere
+    video.loop = true;
+    video.play().catch(err => console.log("Autoplay blocked:", err));
+
     let mm = gsap.matchMedia();
 
-    // Desktop: Scroll scrubbing
+    // Desktop: Parallax + Text Fades
     mm.add("(min-width: 1025px)", () => {
-      // Pause the video and remove loop to allow manual scrubbing
-      video.pause();
-      video.loop = false;
-
-      // ScrollTrigger for video frame scrubbing
-      let scrubTrigger = ScrollTrigger.create({
-        trigger: heroScroll,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: true,
-        onUpdate: self => {
-          const dur = video.duration || 0;
-          if (!dur) return;
-          const p = self.progress;
-          // hold last frame near the end (video "freezes" on the therapist)
-          targetT = Math.min(dur - 0.05, dur * Math.min(p / 0.94, 1));
-          startTicking();
-        }
-      });
-
       // Video parallax as the user scrolls
-      let videoParallax = gsap.fromTo(video, { yPercent: -8 }, {
+      gsap.fromTo(video, { yPercent: -8 }, {
         yPercent: 8,
         ease: 'none',
         scrollTrigger: {
@@ -761,36 +705,24 @@ footer.site .bot { max-width: var(--maxw); margin: 48px auto 0; padding-top: 24p
       });
 
       // Text fades + parallax within first 55% of scroll
-      let contentAnim = gsap.to(heroContent, {
+      gsap.to(heroContent, {
         opacity: 0, y: -60, ease: 'none',
         scrollTrigger: { trigger: heroScroll, start: 'top top', end: '55% top', scrub: true }
       });
-      let indAnim = gsap.to(heroInd, {
+      gsap.to(heroInd, {
         opacity: 0, y: 40, ease: 'none',
         scrollTrigger: { trigger: heroScroll, start: 'top top', end: '32% top', scrub: true }
       });
-      let hintAnim = scrollHint ? gsap.to(scrollHint, {
+      if (scrollHint) gsap.to(scrollHint, {
         opacity: 0, ease: 'none',
         scrollTrigger: { trigger: heroScroll, start: 'top top', end: '12% top', scrub: true }
-      }) : null;
-
-      // Clean up when leaving desktop query
-      return () => {
-        isTicking = false;
-        if (animFrameId) {
-          cancelAnimationFrame(animFrameId);
-          animFrameId = null;
-        }
-      };
+      });
     });
 
-    // Mobile / Tablet: Native Autoplay Loop
+    // Mobile / Tablet: Parallax only
     mm.add("(max-width: 1024px)", () => {
-      video.loop = true;
-      video.play().catch(err => console.log("Autoplay blocked:", err));
-
       // Mobile video parallax scroll
-      let videoParallax = gsap.fromTo(video, { yPercent: -6 }, {
+      gsap.fromTo(video, { yPercent: -6 }, {
         yPercent: 6,
         ease: 'none',
         scrollTrigger: {
@@ -804,10 +736,6 @@ footer.site .bot { max-width: var(--maxw); margin: 48px auto 0; padding-top: 24p
       // Reset any elements modified by desktop GSAP animation
       gsap.set([heroContent, heroInd], { clearProps: "all" });
       if (scrollHint) gsap.set(scrollHint, { clearProps: "all" });
-
-      return () => {
-        video.pause();
-      };
     });
 
     ScrollTrigger.refresh();
