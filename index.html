@@ -113,7 +113,7 @@ footer.site .brand-logo { background-image:url('assets/logo-white.png'); width:1
 .hero-scroll { position: relative; height: 320vh; }
 .hero-pin { position: sticky; top: 0; height: 100vh; overflow: hidden; }
 .hero-video-wrap { position: absolute; inset: 0; }
-.hero-video-wrap video { width: 100%; height: 100%; object-fit: cover; }
+.hero-video-wrap video { width: 100%; height: 100%; object-fit: cover; transform: scale(1.15); transform-origin: center center; }
 .hero-video-wrap::after {
   content:""; position:absolute; inset:0;
   background:
@@ -127,17 +127,16 @@ footer.site .brand-logo { background-image:url('assets/logo-white.png'); width:1
 .hero-content {
   position: absolute; inset: 0; z-index: 3;
   display: flex; flex-direction: column; justify-content: center;
-  padding: 0 var(--edge); max-width: var(--maxw); margin: 0 auto; left:0; right:0;
+  padding: 80px var(--edge) 0; max-width: var(--maxw); margin: 0 auto; left:0; right:0;
   color: #fff;
 }
 .hero-content .inner { max-width: 780px; }
-.hero-h1 { font-size: clamp(38px, 5.6vw, 78px); font-weight: 800; letter-spacing: -0.03em; }
+.hero-h1 { font-size: clamp(34px, 4.8vw, 70px); font-weight: 800; letter-spacing: -0.03em; }
 .hero-h1 .grad { background: linear-gradient(120deg,#bcd4ff,#fff 60%); -webkit-background-clip:text; background-clip:text; color:transparent; }
 .hero-sub { margin-top: 26px; font-size: clamp(17px,1.5vw,21px); line-height: 1.6; max-width: 620px; color: rgba(255,255,255,0.92); }
 .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 38px; }
 .hero-indicators {
-  position: absolute; left: 0; right: 0; bottom: 34px; z-index: 3;
-  padding: 0 var(--edge); max-width: var(--maxw); margin: 0 auto;
+  position: relative; z-index: 3; width: 100%; margin-top: 44px;
 }
 .hero-indicators .grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
 .ind {
@@ -168,10 +167,24 @@ section.block { position: relative; z-index: 4; background: var(--paper); }
 .about-copy p + p { margin-top: 20px; }
 .about-copy p { color: var(--ink-soft); font-size: 17.5px; }
 .timeline { position: relative; padding-left: 34px; }
-.timeline::before { content:""; position:absolute; left: 9px; top: 6px; bottom: 6px; width: 2px; background: linear-gradient(var(--blue-300), var(--blue-600)); }
+.timeline::before { content:""; position:absolute; left: 9px; top: 6px; bottom: 6px; width: 2px; background: rgba(16,58,134,0.12); }
+.timeline-progress-line {
+  position: absolute; left: 9px; top: 6px; bottom: 6px; width: 2px;
+  background: linear-gradient(180deg, var(--blue-400), var(--blue-700));
+  transform-origin: top center;
+  transform: scaleY(0);
+  will-change: transform;
+}
 .tl-item { position: relative; padding-bottom: 34px; }
 .tl-item:last-child { padding-bottom: 0; }
-.tl-item::before { content:""; position:absolute; left: -33px; top: 4px; width: 20px; height: 20px; border-radius:50%; background:#fff; border:3px solid var(--blue-600); box-shadow: 0 0 0 5px var(--blue-100); }
+.tl-dot {
+  position: absolute; left: -33px; top: 4px; width: 20px; height: 20px;
+  border-radius: 50%; background: #fff; border: 3px solid var(--blue-600);
+  box-shadow: 0 0 0 5px var(--blue-100);
+  transform: scale(0);
+  will-change: transform;
+  z-index: 2;
+}
 .tl-year { font-family:"Plus Jakarta Sans"; font-weight:700; color: var(--blue-700); font-size: 14px; letter-spacing:.04em; }
 .tl-title { font-family:"Plus Jakarta Sans"; font-weight:700; font-size: 20px; margin-top:4px; }
 .tl-desc { color: var(--ink-soft); font-size: 16px; margin-top: 6px; }
@@ -337,6 +350,16 @@ footer.site .bot { max-width: var(--maxw); margin: 48px auto 0; padding-top: 24p
 .sec-dark .val { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.14); color: #fff; box-shadow: none; }
 .sec-dark .val:hover { background: rgba(255,255,255,0.11); border-color: var(--blue-300); transform: translateY(-4px); }
 
+@media (max-width: 1024px) {
+  .hero-scroll { height: auto !important; }
+  .hero-pin { position: relative !important; top: auto !important; height: 100vh !important; height: 100dvh !important; }
+  .scroll-hint { display: none !important; }
+  .hero-h1 { font-size: clamp(26px, 4.2vw, 40px) !important; }
+  .hero-sub { margin-top: 14px !important; font-size: 15.5px !important; }
+  .hero-ctas { margin-top: 24px !important; }
+  .hero-content { padding-top: 80px !important; }
+}
+
 @media (max-width: 900px) {
   .about-grid, .ess-grid, .spec-grid, .map-grid { grid-template-columns: 1fr; }
   .diff-grid { grid-template-columns: 1fr 1fr; }
@@ -345,7 +368,7 @@ footer.site .bot { max-width: var(--maxw); margin: 48px auto 0; padding-top: 24p
 }
 @media (max-width: 560px) {
   .diff-grid, .values, .units { grid-template-columns: 1fr; }
-  .hero-h1 { font-size: 40px; }
+  .hero-h1 { font-size: 30px !important; }
 }
 </style>
 </head>
@@ -368,7 +391,7 @@ footer.site .bot { max-width: var(--maxw); margin: 48px auto 0; padding-top: 24p
   <div class="hero-scroll" id="hero-scroll">
     <div class="hero-pin">
       <div class="hero-video-wrap">
-        <video id="hero-video" muted playsinline preload="auto" src="uploads/Child_running_to_therapist_202607151446.mp4"></video>
+        <video id="hero-video" muted playsinline autoplay loop preload="auto" src="uploads/Child_running_to_therapist_202607151446.mp4"></video>
       </div>
       <div class="hero-loading" id="hero-loading"><div class="spin"></div></div>
 
@@ -377,20 +400,19 @@ footer.site .bot { max-width: var(--maxw); margin: 48px auto 0; padding-top: 24p
           <h1 class="hero-h1">Desenvolvimento com ciência.<br /><span class="grad">Cuidado que acolhe toda a família.</span></h1>
           <p class="hero-sub">Atendimento multidisciplinar baseado em evidências para promover desenvolvimento, autonomia e qualidade de vida de crianças, adolescentes e suas famílias.</p>
           <div class="hero-ctas">
-            <a href="#agendar" class="btn btn-primary">Agendar Avaliação
+            <a href="#especialidades" class="btn btn-primary">Conhecer Especialidades
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
-            <a href="#especialidades" class="btn btn-ghost">Conhecer Especialidades</a>
           </div>
         </div>
-      </div>
 
-      <div class="hero-indicators" id="hero-indicators">
-        <div class="grid">
-          <div class="ind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Equipe Multidisciplinar</div>
-          <div class="ind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3M16 3v3"/><path d="M10 14a3 3 0 1 0 4 0V9a2 2 0 1 0-4 0z"/></svg>Baseado em Evidências</div>
-          <div class="ind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 12 5 5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg>Atendimento Humanizado</div>
-          <div class="ind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Estrutura Moderna</div>
+        <div class="hero-indicators" id="hero-indicators">
+          <div class="grid">
+            <div class="ind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Equipe Multidisciplinar</div>
+            <div class="ind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3M16 3v3"/><path d="M10 14a3 3 0 1 0 4 0V9a2 2 0 1 0-4 0z"/></svg>Baseado em Evidências</div>
+            <div class="ind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 12 5 5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg>Atendimento Humanizado</div>
+            <div class="ind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Estrutura Moderna</div>
+          </div>
         </div>
       </div>
 
@@ -412,10 +434,31 @@ footer.site .bot { max-width: var(--maxw); margin: 48px auto 0; padding-top: 24p
           <p>Hoje, a unidade reúne estrutura moderna, equipe especializada, segurança assistencial e excelência terapêutica — unindo ciência, ética, inclusão e compromisso com resultados.</p>
         </div>
         <div class="timeline">
-          <div class="tl-item reveal"><div class="tl-year">2020 · São Luís</div><div class="tl-title">Fundação da Blue</div><div class="tl-desc">Nasce da vivência de uma mãe atípica, buscando um cuidado mais especializado, acessível e coordenado.</div></div>
-          <div class="tl-item reveal"><div class="tl-year">Crescimento</div><div class="tl-title">Expansão da atuação</div><div class="tl-desc">A instituição amplia sua rede e leva o cuidado multidisciplinar a novas cidades.</div></div>
-          <div class="tl-item reveal"><div class="tl-year">Maranhão</div><div class="tl-title">Presença regional</div><div class="tl-desc">Uma rede de cuidado preparada para acolher, orientar e transformar jornadas.</div></div>
-          <div class="tl-item reveal"><div class="tl-year">Hoje · Imperatriz</div><div class="tl-title">Unidade Imperatriz</div><div class="tl-desc">Estrutura moderna, equipe especializada e segurança assistencial reunidas em um só lugar.</div></div>
+          <div class="timeline-progress-line"></div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2020 · São Luís</div>
+            <div class="tl-title">Fundação da Blue</div>
+            <div class="tl-desc">Nasce da vivência de uma mãe atípica, buscando um cuidado mais especializado, acessível e coordenado.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">Crescimento</div>
+            <div class="tl-title">Expansão da atuação</div>
+            <div class="tl-desc">A instituição amplia sua rede e leva o cuidado multidisciplinar a novas cidades.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">Maranhão</div>
+            <div class="tl-title">Presença regional</div>
+            <div class="tl-desc">Uma rede de cuidado preparada para acolher, orientar e transformar jornadas.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">Hoje · Imperatriz</div>
+            <div class="tl-title">Unidade Imperatriz</div>
+            <div class="tl-desc">Estrutura moderna, equipe especializada e segurança assistencial reunidas em um só lugar.</div>
+          </div>
         </div>
       </div>
     </div>
@@ -637,55 +680,136 @@ footer.site .bot { max-width: var(--maxw); margin: 48px auto 0; padding-top: 24p
 
   let scrubInit = false;
   let targetT = 0;
+  let animFrameId = null;
+  let isTicking = false;
+
+  function startTicking() {
+    if (!isTicking) {
+      isTicking = true;
+      tick();
+    }
+  }
+
+  function tick() {
+    if (!isTicking) return;
+    const dur = video.duration || 0;
+    let needsMore = false;
+    
+    if (dur && !video.seeking) {
+      const cur = video.currentTime;
+      const diff = targetT - cur;
+      if (Math.abs(diff) > 0.015) {
+        // ease toward target; cap the per-frame jump so seeks stay decodable
+        const next = cur + Math.max(-0.34, Math.min(0.34, diff * 0.28));
+        try {
+          if (video.fastSeek) video.fastSeek(next); else video.currentTime = next;
+        } catch (e) {}
+        needsMore = true;
+      }
+    } else if (video.seeking) {
+      // Check again next frame when seeking finishes
+      needsMore = true;
+    }
+
+    if (needsMore) {
+      animFrameId = requestAnimationFrame(tick);
+    } else {
+      isTicking = false;
+      animFrameId = null;
+    }
+  }
+
   function setupScrub() {
     if (scrubInit) return;
     scrubInit = true;
     loading.classList.add('hidden');
 
-    // Scroll only sets a TARGET time — a rAF loop eases currentTime toward it,
-    // seeking only when the video isn't already mid-seek. This keeps the
-    // playback fluid instead of stalling on rapid scroll seeks.
-    ScrollTrigger.create({
-      trigger: heroScroll,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: true,
-      onUpdate: self => {
-        const dur = video.duration || 0;
-        if (!dur) return;
-        const p = self.progress;
-        // hold last frame near the end (video "freezes" on the therapist)
-        targetT = Math.min(dur - 0.05, dur * Math.min(p / 0.94, 1));
-      }
-    });
+    let mm = gsap.matchMedia();
 
-    function tick() {
-      const dur = video.duration || 0;
-      if (dur && !video.seeking) {
-        const cur = video.currentTime;
-        const diff = targetT - cur;
-        if (Math.abs(diff) > 0.015) {
-          // ease toward target; cap the per-frame jump so seeks stay decodable
-          const next = cur + Math.max(-0.34, Math.min(0.34, diff * 0.28));
-          try {
-            if (video.fastSeek) video.fastSeek(next); else video.currentTime = next;
-          } catch (e) {}
+    // Desktop: Scroll scrubbing
+    mm.add("(min-width: 1025px)", () => {
+      // Pause the video and remove loop to allow manual scrubbing
+      video.pause();
+      video.loop = false;
+
+      // ScrollTrigger for video frame scrubbing
+      let scrubTrigger = ScrollTrigger.create({
+        trigger: heroScroll,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: true,
+        onUpdate: self => {
+          const dur = video.duration || 0;
+          if (!dur) return;
+          const p = self.progress;
+          // hold last frame near the end (video "freezes" on the therapist)
+          targetT = Math.min(dur - 0.05, dur * Math.min(p / 0.94, 1));
+          startTicking();
         }
-      }
-      requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
+      });
 
-    // Text fades + parallax within first 55% of scroll
-    gsap.to(heroContent, {
-      opacity: 0, y: -60, ease: 'none',
-      scrollTrigger: { trigger: heroScroll, start: 'top top', end: '55% top', scrub: true }
+      // Video parallax as the user scrolls
+      let videoParallax = gsap.fromTo(video, { yPercent: -8 }, {
+        yPercent: 8,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroScroll,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+
+      // Text fades + parallax within first 55% of scroll
+      let contentAnim = gsap.to(heroContent, {
+        opacity: 0, y: -60, ease: 'none',
+        scrollTrigger: { trigger: heroScroll, start: 'top top', end: '55% top', scrub: true }
+      });
+      let indAnim = gsap.to(heroInd, {
+        opacity: 0, y: 40, ease: 'none',
+        scrollTrigger: { trigger: heroScroll, start: 'top top', end: '32% top', scrub: true }
+      });
+      let hintAnim = scrollHint ? gsap.to(scrollHint, {
+        opacity: 0, ease: 'none',
+        scrollTrigger: { trigger: heroScroll, start: 'top top', end: '12% top', scrub: true }
+      }) : null;
+
+      // Clean up when leaving desktop query
+      return () => {
+        isTicking = false;
+        if (animFrameId) {
+          cancelAnimationFrame(animFrameId);
+          animFrameId = null;
+        }
+      };
     });
-    gsap.to(heroInd, {
-      opacity: 0, y: 40, ease: 'none',
-      scrollTrigger: { trigger: heroScroll, start: 'top top', end: '32% top', scrub: true }
+
+    // Mobile / Tablet: Native Autoplay Loop
+    mm.add("(max-width: 1024px)", () => {
+      video.loop = true;
+      video.play().catch(err => console.log("Autoplay blocked:", err));
+
+      // Mobile video parallax scroll
+      let videoParallax = gsap.fromTo(video, { yPercent: -6 }, {
+        yPercent: 6,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroScroll,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+
+      // Reset any elements modified by desktop GSAP animation
+      gsap.set([heroContent, heroInd], { clearProps: "all" });
+      if (scrollHint) gsap.set(scrollHint, { clearProps: "all" });
+
+      return () => {
+        video.pause();
+      };
     });
-    if (scrollHint) gsap.to(scrollHint, { opacity: 0, ease: 'none', scrollTrigger: { trigger: heroScroll, start: 'top top', end: '12% top', scrub: true } });
+
     ScrollTrigger.refresh();
   }
 
@@ -709,6 +833,57 @@ footer.site .bot { max-width: var(--maxw); margin: 48px auto 0; padding-top: 24p
     });
   } else {
     gsap.utils.toArray('.reveal').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+  }
+
+  /* ---------- Timeline scroll progress (Evolution Board) ---------- */
+  if (!prefersReduced) {
+    const timeline = document.querySelector('.timeline');
+    if (timeline) {
+      const progressLine = timeline.querySelector('.timeline-progress-line');
+      const tlItems = gsap.utils.toArray('.timeline .tl-item');
+      
+      let timelineTween = gsap.timeline({
+        scrollTrigger: {
+          trigger: timeline,
+          start: 'top 80%',
+          end: 'bottom 70%',
+          scrub: 1
+        }
+      });
+      
+      timelineTween.to(progressLine, { scaleY: 1, ease: 'none' }, 0);
+      
+      tlItems.forEach((item, index) => {
+        const dot = item.querySelector('.tl-dot');
+        const year = item.querySelector('.tl-year');
+        const title = item.querySelector('.tl-title');
+        const desc = item.querySelector('.tl-desc');
+        
+        const pos = index / (tlItems.length - 1);
+        
+        // Pop dot
+        timelineTween.fromTo(dot, 
+          { scale: 0, backgroundColor: "#fff", borderColor: "rgba(37,99,235,0.2)" },
+          { scale: 1, backgroundColor: "#fff", borderColor: "var(--blue-600)", ease: 'back.out(1.5)', duration: 0.2 },
+          pos * 0.8
+        );
+        
+        // Slide & fade in text
+        timelineTween.fromTo([year, title, desc],
+          { opacity: 0, x: 25 },
+          { opacity: 1, x: 0, duration: 0.3, stagger: 0.08, ease: 'power2.out' },
+          pos * 0.8 + 0.05
+        );
+      });
+    }
+  } else {
+    const progressLine = document.querySelector('.timeline-progress-line');
+    if (progressLine) progressLine.style.transform = 'none';
+    document.querySelectorAll('.tl-dot').forEach(dot => dot.style.transform = 'none');
+    document.querySelectorAll('.timeline .tl-item .tl-year, .timeline .tl-item .tl-title, .timeline .tl-item .tl-desc').forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
   }
 
   /* ---------- Estrutura: side-by-side spotlight (touch = tap to highlight) ---------- */
